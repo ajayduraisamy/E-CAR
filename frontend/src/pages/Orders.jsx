@@ -63,21 +63,23 @@ function Orders() {
               className="glass-panel overflow-hidden"
             >
               <div className="flex flex-col lg:flex-row">
-                {/* Car Image */}
+                {/* Car or Listing Image */}
                 <div className="relative h-48 lg:h-auto lg:w-64 flex-shrink-0">
                   <img
                     src={
                       order.car?.image
                         ? `${API_BASE}/${order.car.image}`
+                        : order.listing?.image
+                        ? `${API_BASE}/${order.listing.image}`
                         : 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80'
                     }
-                    alt={order.car?.name || 'Car'}
+                    alt={order.car?.name || order.listing?.title || 'Car'}
                     className="h-full w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent lg:bg-gradient-to-t lg:from-black/70 lg:to-transparent" />
                   <div className="absolute bottom-4 left-4 text-white">
-                    <p className="text-xs uppercase tracking-wider text-white/80">{order.car?.brand}</p>
-                    <h3 className="text-lg font-semibold">{order.car?.name || 'N/A'}</h3>
+                    <p className="text-xs uppercase tracking-wider text-white/80">{order.car?.brand || order.listing?.location}</p>
+                    <h3 className="text-lg font-semibold">{order.car?.name || order.listing?.title || 'N/A'}</h3>
                   </div>
                 </div>
 
@@ -92,7 +94,7 @@ function Orders() {
 
                       <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                         <Car size={18} className="text-violet-500" />
-                        <span>Price: ₹{order.car?.price?.toLocaleString() || 'N/A'}</span>
+                        <span>Price: ₹{order.car?.price?.toLocaleString() || order.listing?.price?.toLocaleString() || 'N/A'}</span>
                       </div>
 
                       <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-500">

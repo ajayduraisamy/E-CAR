@@ -14,6 +14,11 @@ const orderSchema = new mongoose.Schema(
       ref: 'Car',
       default: null
     },
+    listing: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Listing',
+      default: null
+    },
     amount: {
       type: Number,
       required: true,

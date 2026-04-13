@@ -62,9 +62,9 @@ function Marketplace() {
 
       // Create order
     const orderRes = await orderService.createOrder({
-  carId: orderingItem._id,
-  amount: Number(orderingItem.price)
-});
+      listingId: orderingItem._id,
+      amount: Number(orderingItem.price)
+    });
       const orderId = orderRes.data.order._id;
 
       // Process payment
