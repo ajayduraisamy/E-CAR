@@ -37,7 +37,11 @@ function CarCard({ car }) {
           <Gauge className="mx-auto mb-1 h-4 w-4 text-violet-500" />
           {car.top_speed || '--'} km/h
         </div>
+            <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-xl">
+  Buy Now
+</button>
       </div>
+  
     </motion.article>
   );
 }

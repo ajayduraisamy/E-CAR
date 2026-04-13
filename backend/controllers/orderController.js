@@ -6,26 +6,31 @@ const Car = require('../models/Car');
 
 const createOrder = async (req, res) => {
   try {
-    const { car, amount } = req.body;
+    const { car, carId, amount } = req.body;
 
-    if (amount === undefined || Number(amount) <= 0) {
-      return res.status(400).json({ message: 'Valid amount is required.' });
+    // 🔥 support both car & carId
+    const finalCarId = car || carId;
+
+    if (!finalCarId) {
+      return res.status(400).json({ message: 'Car ID is required.' });
     }
 
-    if (car) {
-      if (!mongoose.Types.ObjectId.isValid(car)) {
-        return res.status(400).json({ message: 'Invalid car ID.' });
-      }
+    if (!mongoose.Types.ObjectId.isValid(finalCarId)) {
+      return res.status(400).json({ message: 'Invalid car ID.' });
+    }
 
-      const carExists = await Car.findById(car);
-      if (!carExists) {
-        return res.status(404).json({ message: 'Car not found.' });
-      }
+    const carExists = await Car.findById(finalCarId);
+    if (!carExists) {
+      return res.status(404).json({ message: 'Car not found.' });
+    }
+
+    if (!amount || Number(amount) <= 0) {
+      return res.status(400).json({ message: 'Valid amount is required.' });
     }
 
     const order = await Order.create({
       user: req.user.id,
-      car: car || null,
+      car: finalCarId,
       amount: Number(amount),
       status: 'pending'
     });
@@ -34,6 +39,7 @@ const createOrder = async (req, res) => {
       message: 'Order created successfully.',
       order
     });
+
   } catch (error) {
     return res.status(500).json({ message: 'Server error while creating order.' });
   }

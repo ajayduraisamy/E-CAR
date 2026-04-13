@@ -182,18 +182,22 @@ const compareCars = async (req, res) => {
     }
 
     return res.status(200).json({
-      cars: [
-        {
-          id: car1._id,
-          name: car1.name,
-          brand: car1.brand
-        },
-        {
-          id: car2._id,
-          name: car2.name,
-          brand: car2.brand
-        }
-      ],
+     cars: [
+  {
+    _id: car1._id,
+    name: car1.name,
+    brand: car1.brand,
+    price: car1.price,
+    image: car1.image
+  },
+  {
+    _id: car2._id,
+    name: car2.name,
+    brand: car2.brand,
+    price: car2.price,
+    image: car2.image
+  }
+],
       comparison,
       summary
     });

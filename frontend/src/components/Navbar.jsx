@@ -19,7 +19,7 @@ function Navbar() {
   const navigate = useNavigate();
 
  const links = useMemo(() => {
-  // ❌ Not logged in
+  //  Not logged in
   if (!isAuthenticated) {
     return [
       { to: '/', label: 'Home' },
@@ -27,7 +27,7 @@ function Navbar() {
     ];
   }
 
-  // 👨‍💼 Admin
+  // 👨 Admin
  if (isAdmin) {
   return [
     { to: '/admin', label: 'Dashboard' },
@@ -64,7 +64,7 @@ function Navbar() {
           <div>
             <p className="text-lg font-bold tracking-tight">E-CAR</p>
             <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
-              Premium Garage
+            Comparison & Marketplace
             </p>
           </div>
         </NavLink>
