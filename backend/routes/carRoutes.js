@@ -6,6 +6,7 @@ const {
   getCars,
   getCarById,
   deleteCar,
+  updateCar,
   compareCars
 } = require('../controllers/carController');
 const authMiddleware = require('../middleware/authMiddleware');
@@ -18,6 +19,7 @@ router.get('/', getCars);
 router.get('/compare/:id1/:id2', compareCars);
 router.get('/:id', getCarById);
 router.post('/', authMiddleware, adminMiddleware, upload.single('image'), createCar);
+router.put('/:id', authMiddleware, adminMiddleware, upload.single('image'), updateCar);
 router.delete('/:id', authMiddleware, adminMiddleware, deleteCar);
 
 module.exports = router;

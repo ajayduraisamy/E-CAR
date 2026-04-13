@@ -71,6 +71,51 @@ const deleteCar = async (req, res) => {
   }
 };
 
+const updateCar = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid car ID.' });
+    }
+
+    const updateData = { ...req.body };
+    
+    // Handle image upload
+    if (req.file) {
+      updateData.image = `uploads/${req.file.filename}`;
+    }
+
+    // Convert string booleans to actual booleans
+    if (updateData.abs !== undefined) {
+      updateData.abs = updateData.abs === 'true' || updateData.abs === true;
+    }
+    if (updateData.sunroof !== undefined) {
+      updateData.sunroof = updateData.sunroof === 'true' || updateData.sunroof === true;
+    }
+    if (updateData.gps !== undefined) {
+      updateData.gps = updateData.gps === 'true' || updateData.gps === true;
+    }
+
+    const updatedCar = await Car.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedCar) {
+      return res.status(404).json({ message: 'Car not found.' });
+    }
+
+    return res.status(200).json(updatedCar);
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ message: error.message });
+    }
+    return res.status(500).json({ message: 'Server error while updating car.' });
+  }
+};
+
 const getBetterCar = (car1, car2, field, preference) => {
   if (car1[field] === car2[field]) return 'tie';
 
@@ -162,5 +207,6 @@ module.exports = {
   getCars,
   getCarById,
   deleteCar,
+  updateCar,
   compareCars
 };

@@ -9,6 +9,13 @@ import Compare from './pages/Compare';
 import Marketplace from './pages/Marketplace';
 import SellCar from './pages/SellCar';
 import AdminDashboard from './pages/AdminDashboard';
+import Orders from "./pages/Orders";
+import MyListings from "./pages/MyListings";
+import AdminOrders from "./pages/AdminOrders";
+import AdminUsers from "./pages/AdminUsers";
+import AdminAddCar from "./pages/AdminAddCar";
+import AdminManageCars from "./pages/AdminManageCars";
+
 
 const pageVariants = {
   initial: { opacity: 0, y: 14 },
@@ -49,6 +56,12 @@ function App() {
           <Route path="/register" element={<PageShell><Register /></PageShell>} />
           <Route path="/compare" element={<PageShell><Compare /></PageShell>} />
           <Route path="/marketplace" element={<PageShell><Marketplace /></PageShell>} />
+          <Route path="/orders" element={<PageShell><Orders /></PageShell>} />
+          <Route path="/my-listings" element={<PageShell><MyListings /></PageShell>} />
+          <Route path="/admin/orders" element={<PageShell><AdminOrders /></PageShell>} />
+          <Route path="/admin/users" element={<PageShell><AdminUsers /></PageShell>} />
+          <Route path="/admin/add-car" element={<PageShell><AdminAddCar /></PageShell>} />
+          <Route path="/admin/manage-cars" element={<PageShell><AdminManageCars /></PageShell>} />
           <Route
             path="/sell"
             element={

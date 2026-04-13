@@ -18,18 +18,36 @@ function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
-  const links = useMemo(() => {
-    const base = [
+ const links = useMemo(() => {
+  // ❌ Not logged in
+  if (!isAuthenticated) {
+    return [
       { to: '/', label: 'Home' },
-      { to: '/compare', label: 'Compare' },
-      { to: '/marketplace', label: 'Marketplace' }
+      { to: '/compare', label: 'Compare' }
     ];
+  }
 
-    if (isAuthenticated) base.push({ to: '/sell', label: 'Sell Car' });
-    if (isAdmin) base.push({ to: '/admin', label: 'Admin' });
+  // 👨‍💼 Admin
+ if (isAdmin) {
+  return [
+    { to: '/admin', label: 'Dashboard' },
+    { to: '/admin/add-car', label: 'Add Car' },
+    { to: '/admin/manage-cars', label: 'Manage Cars' },
+    { to: '/admin/orders', label: 'Orders' },
+    { to: '/admin/users', label: 'Users' }
+  ];
+}
 
-    return base;
-  }, [isAuthenticated, isAdmin]);
+  // 👤 User
+  return [
+    { to: '/', label: 'Home' },
+    { to: '/compare', label: 'Compare' },
+    { to: '/marketplace', label: 'Marketplace' },
+    { to: '/sell', label: 'Sell Car' },
+    { to: '/orders', label: 'My Orders' },
+    { to: '/my-listings', label: 'My Listings' }
+  ];
+}, [isAuthenticated, isAdmin]);
 
   const handleLogout = () => {
     logout();

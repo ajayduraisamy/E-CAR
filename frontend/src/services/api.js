@@ -24,6 +24,7 @@ export const carService = {
   getCarById: (id) => api.get(`/api/cars/${id}`),
   compareCars: (id1, id2) => api.get(`/api/cars/compare/${id1}/${id2}`),
   addCar: (formData) => api.post('/api/cars', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  updateCar: (id, formData) => api.put(`/api/cars/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
   deleteCar: (id) => api.delete(`/api/cars/${id}`)
 };
 
@@ -35,13 +36,19 @@ export const marketService = {
 };
 
 export const orderService = {
-  createOrder: (payload) => api.post('/api/order/create', payload),
-  getUserOrders: () => api.get('/api/order/user')
+  createOrder: (payload) => api.post('/api/order', payload),
+  getUserOrders: () => api.get('/api/order/my'),
+  getAllOrders: () => api.get('/api/order') // ✅ FIXED
 };
 
 export const paymentService = {
   payOrder: (payload) => api.post('/api/payment/pay', payload)
 };
+
+export const userService = {
+  getUsers: () => api.get('/api/users') // 👈 your backend route
+};
+
 
 export default api;
 

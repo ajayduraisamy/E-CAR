@@ -32,7 +32,7 @@ app.use('/api/cars', require('./routes/carRoutes'));
 app.use('/api/market', require('./routes/marketRoutes'));
 app.use('/api/order', require('./routes/orderRoutes'));
 app.use('/api/payment', require('./routes/paymentRoutes'));
-
+app.use('/api/users', require('./routes/userRoutes'));
 // 404 handler.
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found.' });

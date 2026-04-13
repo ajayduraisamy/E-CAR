@@ -51,8 +51,22 @@ const getUserOrders = async (req, res) => {
   }
 };
 
+const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate('car', 'name brand price image')
+      .populate('user', 'name email')
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json(orders);
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error while fetching all orders.' });
+  }
+};
+
 module.exports = {
   createOrder,
-  getUserOrders
+  getUserOrders,
+  getAllOrders
 };
 
