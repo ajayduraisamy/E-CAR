@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    @apply min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100;
+    background-image:
+      radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.12), transparent 28%),
+      radial-gradient(circle at 85% 0%, rgba(99, 102, 241, 0.14), transparent 30%);
+  }
+
+  * {
+    @apply border-slate-200 dark:border-slate-800;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply rounded-3xl border border-white/20 bg-white/60 shadow-2xl backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/50;
+  }
+
+  .brand-gradient {
+    @apply bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500;
+  }
+
+  .text-brand-gradient {
+    @apply bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent;
+  }
+
+  .section-padding {
+    @apply px-4 py-14 sm:px-6 lg:px-10;
+  }
+}
+
+@layer utilities {
+  .soft-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .soft-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .soft-scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-300 dark:bg-slate-700;
+  }
+}
+
