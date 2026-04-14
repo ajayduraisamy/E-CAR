@@ -1,6 +1,7 @@
 import { LoaderCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+// A simple loading spinner component with a label. The spinner rotates indefinitely using framer-motion for smooth animation.
 function LoadingSpinner({ label = 'Loading...' }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-16 text-slate-500 dark:text-slate-300">
@@ -15,5 +16,6 @@ function LoadingSpinner({ label = 'Loading...' }) {
   );
 }
 
+// Export the LoadingSpinner component as the default export of this module.
 export default LoadingSpinner;
 

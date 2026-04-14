@@ -44,13 +44,16 @@ app.use((err, req, res, next) => {
     return res.status(400).json({ message: err.message });
   }
 
+  // Multer file size limit error.
   if (err && err.code === 'LIMIT_FILE_SIZE') {
     return res.status(400).json({ message: 'Image size should be 5MB or less.' });
   }
 
+  // Default to 500 server error for unhandled cases.
   return res.status(500).json({ message: 'Internal server error.' });
 });
 
+// Start the server.
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

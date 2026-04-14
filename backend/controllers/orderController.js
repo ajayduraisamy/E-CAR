@@ -5,6 +5,7 @@ const Order = require('../models/Order');
 const Car = require('../models/Car');
 const Listing = require('../models/Listing');
 
+// Create a new order for a car or listing
 const createOrder = async (req, res) => {
   try {
     const { car, carId, listing, listingId, amount } = req.body;
@@ -17,6 +18,7 @@ const createOrder = async (req, res) => {
       return res.status(400).json({ message: 'Car ID or Listing ID is required.' });
     }
 
+    // Validate car and listing existence if IDs are provided
     let carExists = null;
     let listingExists = null;
     if (finalCarId) {
@@ -38,10 +40,11 @@ const createOrder = async (req, res) => {
       }
     }
 
+    // Validate amount
     if (!amount || Number(amount) <= 0) {
       return res.status(400).json({ message: 'Valid amount is required.' });
     }
-
+// Create the order
     const order = await Order.create({
       user: req.user.id,
       car: finalCarId || null,
@@ -60,6 +63,7 @@ const createOrder = async (req, res) => {
   }
 };
 
+// Get orders for the logged-in user
 const getUserOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user.id })
@@ -73,6 +77,8 @@ const getUserOrders = async (req, res) => {
   }
 };
 
+
+// Get all orders (admin route)
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
@@ -87,6 +93,7 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+// Admin can update order status (not implemented here, but can be added similarly to marketController's updateListing)
 module.exports = {
   createOrder,
   getUserOrders,

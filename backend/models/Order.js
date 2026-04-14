@@ -2,6 +2,7 @@
 // Order model for storing user purchase intent and payment status.
 const mongoose = require('mongoose');
 
+// Order schema with references to User, Car, and Listing, plus payment details.
 const orderSchema = new mongoose.Schema(
   {
     user: {
@@ -42,5 +43,6 @@ const orderSchema = new mongoose.Schema(
   
 );
 
+// Export the Order model for use in controllers and routes.
 module.exports = mongoose.model('Order', orderSchema);
 

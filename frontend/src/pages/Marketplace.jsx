@@ -1,3 +1,4 @@
+// This file is part of CarBazaar - A Peer-to-Peer Car Selling Platform
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Phone, PlusCircle, ShoppingCart, X, CreditCard, Wallet } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -9,8 +10,10 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { useAuth } from '../context/AuthContext';
 import { marketService, orderService, paymentService } from '../services/api';
 
+// Base URL for images (adjust if your backend serves from a different path)
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
+// Marketplace page where users can browse listings and place orders.
 function Marketplace() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -26,6 +29,7 @@ function Marketplace() {
   const [orderLoading, setOrderLoading] = useState(false);
   const [orderMessage, setOrderMessage] = useState('');
 
+  // Fetch marketplace listings on component mount
   useEffect(() => {
     const fetchListings = async () => {
       try {
@@ -43,6 +47,7 @@ function Marketplace() {
     fetchListings();
   }, []);
 
+  // Handle order button click - show order modal if authenticated, otherwise redirect to login
   const handleOrderClick = (item) => {
     if (!isAuthenticated) {
       navigate('/login', { state: { from: '/marketplace' } });
@@ -55,6 +60,7 @@ function Marketplace() {
     setOrderMessage('');
   };
 
+  // Handle placing an order with selected payment method
   const handlePlaceOrder = async () => {
     try {
       setOrderLoading(true);
@@ -74,6 +80,7 @@ function Marketplace() {
         method: paymentMethod
       };
 
+      // Validate payment details based on selected method
       if (paymentMethod === 'card') {
         if (!cardLast4 || cardLast4.length !== 4) {
           setOrderMessage('Please enter last 4 digits of card');
@@ -82,6 +89,7 @@ function Marketplace() {
         }
         paymentPayload.card_last4 = cardLast4;
       } else {
+        // UPI validation (basic check, can be enhanced)
         if (!upiId) {
           setOrderMessage('Please enter UPI ID');
           setOrderLoading(false);
@@ -89,7 +97,7 @@ function Marketplace() {
         }
         paymentPayload.upi_id = upiId;
       }
-
+// Call payment API
       await paymentService.payOrder(paymentPayload);
 
       setOrderMessage('Order placed successfully!');

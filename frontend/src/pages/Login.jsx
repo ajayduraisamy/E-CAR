@@ -1,3 +1,4 @@
+// This file is part of E-CAR project (e-car-frontend)
 import { motion } from 'framer-motion';
 import { KeyRound, Mail } from 'lucide-react';
 import { useState } from 'react';
@@ -6,6 +7,7 @@ import GradientButton from '../components/GradientButton';
 import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/api';
 
+// Login page with form validation and error handling.
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,10 +22,12 @@ function Login() {
 
   const from = location.state?.from || '/';
 
+  // Handle input changes for email and password fields.
   const handleChange = (event) => {
     setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
+  //// Handle form submission for login, including API call and error handling.
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');

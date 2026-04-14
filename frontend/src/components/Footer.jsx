@@ -1,5 +1,6 @@
 import { Facebook, Github, Instagram, Linkedin } from 'lucide-react';
 
+// Socials
 const socials = [
   { icon: Github, href: '#' },
   { icon: Linkedin, href: '#' },
@@ -7,6 +8,7 @@ const socials = [
   { icon: Facebook, href: '#' }
 ];
 
+// Footer
 function Footer() {
   return (
     <footer className="mt-20 border-t border-white/20 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-slate-200">
@@ -40,4 +42,5 @@ function Footer() {
   );
 }
 
+// Export the Footer component as default
 export default Footer;

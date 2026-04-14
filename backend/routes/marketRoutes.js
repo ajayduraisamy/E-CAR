@@ -5,7 +5,8 @@ const {
   createListing,
   getListings,
   getUserListings,
-  updateListing
+  updateListing,
+  deleteListing
 } = require('../controllers/marketController');
 const authMiddleware = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
@@ -19,8 +20,12 @@ router.post('/', authMiddleware, upload.single('image'), createListing);
 router.get('/', getListings);
 // Get listings for logged-in user
 router.get('/user', authMiddleware, getUserListings);
+
 // Update listing (only by owner)
 router.put('/:id', authMiddleware, upload.single('image'), updateListing);
+
+// Delete listing (only by owner)
+router.delete('/:id', authMiddleware, deleteListing);
 
 module.exports = router;
 

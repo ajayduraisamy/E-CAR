@@ -1,5 +1,6 @@
 import { AlertTriangle } from 'lucide-react';
 
+// A simple error state component that can be reused across the application.
 function ErrorState({ message = 'Something went wrong. Please try again.' }) {
   return (
     <div className="glass-panel mx-auto max-w-2xl border-red-300/50 p-6 text-center dark:border-red-800/50">
@@ -11,5 +12,6 @@ function ErrorState({ message = 'Something went wrong. Please try again.' }) {
   );
 }
 
+// This component can be used in any part of the application where an error state needs to be displayed.
 export default ErrorState;
 

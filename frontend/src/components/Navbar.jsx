@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
+// Dynamic class for nav links based on active state
 const navLinkClass = ({ isActive }) =>
   `group relative px-1 py-2 text-sm font-medium transition ${
     isActive
@@ -12,6 +13,7 @@ const navLinkClass = ({ isActive }) =>
       : 'text-slate-700 hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-300'
   }`;
 
+  // Navbar component with responsive design and dynamic links based on authentication and role.
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
@@ -27,7 +29,7 @@ function Navbar() {
     ];
   }
 
-  // 👨 Admin
+  //  Admin
  if (isAdmin) {
   return [
     { to: '/admin', label: 'Dashboard' },
@@ -38,7 +40,7 @@ function Navbar() {
   ];
 }
 
-  // 👤 User
+  //  User
   return [
     { to: '/', label: 'Home' },
     { to: '/compare', label: 'Compare' },
@@ -49,6 +51,8 @@ function Navbar() {
   ];
 }, [isAuthenticated, isAdmin]);
 
+
+// Logout handler that clears auth state and redirects to login page.
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -185,4 +189,5 @@ function Navbar() {
   );
 }
 
+// Exporting the Navbar component as default for use in other parts of the application.
 export default Navbar;

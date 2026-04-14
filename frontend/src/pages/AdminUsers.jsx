@@ -1,3 +1,4 @@
+// AdminUsers.jsx - Admin dashboard page for managing and viewing all registered users.
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, User, Mail, Shield, Search, Trash2, X, UserRound, Calendar } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -5,6 +6,7 @@ import ErrorState from '../components/ErrorState';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { userService } from '../services/api';
 
+// Note: Ensure your backend has the route GET /api/users that returns all registered users for admin view.
 function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,6 +18,7 @@ function AdminUsers() {
   const [deletingUser, setDeletingUser] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  // Fetch all users for admin view
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -29,10 +32,12 @@ function AdminUsers() {
     }
   };
 
+  // Fetch users on component mount
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  // Filter users
   const filteredUsers = users.filter((user) => {
     const matchesSearch = 
       user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -42,17 +47,19 @@ function AdminUsers() {
     
     return matchesSearch && matchesRole;
   });
-
+// Calculate stats
   const stats = {
     total: users.length,
     admins: users.filter(u => u.role === 'admin').length,
     users: users.filter(u => u.role === 'user').length
   };
 
+  // Handle delete user click
   const handleDeleteClick = (user) => {
     setDeletingUser(user);
   };
 
+  // Handle confirm delete action
   const handleConfirmDelete = async () => {
     try {
       setDeleteLoading(true);
@@ -67,6 +74,7 @@ function AdminUsers() {
     }
   };
 
+  // Format date utility
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-IN', {
       day: 'numeric',

@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
+// AdminAddCar.jsx
 
+import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 
 import ErrorState from '../components/ErrorState';
@@ -7,6 +8,7 @@ import GradientButton from '../components/GradientButton';
 
 import { carService, marketService } from '../services/api';
 
+// Initial form state for adding a new car
 const initialCarForm = {
   name: '',
   brand: '',
@@ -28,6 +30,7 @@ const initialCarForm = {
   gps: 'true'
 };
 
+// Admin dashboard page for adding new cars and viewing stats
 function AdminAddCar() {
   const [cars, setCars] = useState([]);
   const [listings, setListings] = useState([]);
@@ -38,6 +41,7 @@ function AdminAddCar() {
   const [formLoading, setFormLoading] = useState(false);
   const [formMessage, setFormMessage] = useState('');
 
+  // Fetch cars and marketplace listings for dashboard stats
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
@@ -54,11 +58,12 @@ function AdminAddCar() {
       setLoading(false);
     }
   };
-
+// Fetch data on component mount
   useEffect(() => {
     fetchDashboardData();
   }, []);
 
+  // Compute dashboard stats using useMemo for performance
   const stats = useMemo(() => {
     const uniqueSellers = new Set(listings.map((item) => item?.user?._id || item?.user)).size;
     return {
@@ -68,15 +73,17 @@ function AdminAddCar() {
     };
   }, [cars, listings]);
 
+  // Handle input changes for the car form
   const handleCarInput = (event) => {
     setCarForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
+  // Handle form submission to create a new car
   const handleCreateCar = async (event) => {
     event.preventDefault();
     setFormMessage('');
     setError('');
-
+// Create FormData for multipart/form-data request
     try {
       setFormLoading(true);
       const formData = new FormData();

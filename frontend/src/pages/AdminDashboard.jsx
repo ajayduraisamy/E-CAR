@@ -1,3 +1,4 @@
+// AdminDashboard.jsx
 import { motion } from 'framer-motion';
 import { CarFront, UsersRound, ShoppingCart, DollarSign, List } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -5,6 +6,7 @@ import ErrorState from '../components/ErrorState';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { carService, marketService, orderService, userService } from '../services/api';
 
+// ADMIN DASHBOARD - OVERVIEW OF SYSTEM STATS
 function AdminDashboard() {
   const [cars, setCars] = useState([]);
   const [listings, setListings] = useState([]);
@@ -19,7 +21,7 @@ function AdminDashboard() {
     try {
       setLoading(true);
       setError('');
-
+//  FETCH ALL DATA IN PARALLEL
       const [
         { data: carData },
         { data: listingData },
@@ -31,7 +33,7 @@ function AdminDashboard() {
         orderService.getAllOrders(),  
         userService.getUsers()        
       ]);
-
+// UPDATE STATE WITH FETCHED DATA
       setCars(carData);
       setListings(listingData);
       setOrders(orderData);
@@ -43,7 +45,7 @@ function AdminDashboard() {
       setLoading(false);
     }
   };
-
+// FETCH DATA ON COMPONENT MOUNT
   useEffect(() => {
     fetchDashboardData();
   }, []);

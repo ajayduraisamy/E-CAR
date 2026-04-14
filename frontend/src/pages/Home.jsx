@@ -1,3 +1,4 @@
+/// Home.jsx - Main landing page with hero section, featured cars, and ordering flow
 import { motion } from 'framer-motion';
 import { ArrowRight, ShieldCheck, Sparkles, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -8,6 +9,7 @@ import ErrorState from '../components/ErrorState';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { carService } from '../services/api';
 
+// Data for "Why Choose Us" section
 const whyChooseUs = [
   {
     icon: ShieldCheck,
@@ -26,10 +28,12 @@ const whyChooseUs = [
   }
 ];
 
+// Home page component
 import { AnimatePresence } from 'framer-motion';
 import { X, Car as CarIcon } from 'lucide-react';
 import { orderService, paymentService } from '../services/api';
 
+// Main Home component
 function Home() {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +45,7 @@ function Home() {
   const [orderLoading, setOrderLoading] = useState(false);
   const [orderMessage, setOrderMessage] = useState('');
 
+  // Fetch featured cars on component mount
   useEffect(() => {
     const fetchCars = async () => {
       try {

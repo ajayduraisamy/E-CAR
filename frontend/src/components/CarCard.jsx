@@ -2,11 +2,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Fuel, Gauge, Zap, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 
+// Base URL for API calls, can be set via environment variable or defaults to localhost
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
+// CarCard component to display car information in a card format with expandable details and order functionality.
 function CarCard({ car, onOrder }) {
   const [showDetails, setShowDetails] = useState(false);
 
+  // Main render of the car card
   return (
     <motion.article
       whileHover={{ y: -8 }}
@@ -77,6 +80,7 @@ function CarCard({ car, onOrder }) {
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
+           
               <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 p-4 text-[11px]">
                 <DetailRow label="Engine" value={car.engine} />
                 <DetailRow label="Torque" value={car.torque} />

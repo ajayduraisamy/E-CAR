@@ -8,5 +8,7 @@ const adminMiddleware = (req, res, next) => {
   next();
 };
 
+// Usage: Apply this middleware to routes that require admin access, e.g.:
+
 module.exports = adminMiddleware;
 

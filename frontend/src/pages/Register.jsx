@@ -1,3 +1,4 @@
+// This file defines the Register component, which provides a user interface for new users to create an account on the E-CAR platform. It includes form fields for name, email, password, and role selection, along with error handling and loading states during the registration process.
 import { motion } from 'framer-motion';
 import { KeyRound, Mail, UserRound } from 'lucide-react';
 import { useState } from 'react';
@@ -6,10 +7,12 @@ import GradientButton from '../components/GradientButton';
 import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/api';
 
+// Register component
 function Register() {
   const navigate = useNavigate();
   const { saveAuth } = useAuth();
 
+  // Form state and handlers
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -19,14 +22,16 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Handle form input changes
   const handleChange = (event) => {
     setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
+  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
-
+//  client-side validation
     try {
       setLoading(true);
       const { data } = await authService.register(form);

@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const Car = require('../models/Car');
 
+// Create a new car listing.
 const createCar = async (req, res) => {
   try {
     const imagePath = req.file
@@ -13,7 +14,7 @@ const createCar = async (req, res) => {
       ...req.body,
       image: imagePath
     };
-
+// Convert string booleans to actual booleans
     const car = await Car.create(carData);
     return res.status(201).json(car);
   } catch (error) {
@@ -24,6 +25,7 @@ const createCar = async (req, res) => {
   }
 };
 
+// Get all cars with basic details for listing.
 const getCars = async (req, res) => {
   try {
     const cars = await Car.find().sort({ createdAt: -1 });
@@ -33,6 +35,7 @@ const getCars = async (req, res) => {
   }
 };
 
+// Get detailed information about a specific car by ID.
 const getCarById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -40,7 +43,7 @@ const getCarById = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'Invalid car ID.' });
     }
-
+// Find the car by ID and return its details.
     const car = await Car.findById(id);
     if (!car) {
       return res.status(404).json({ message: 'Car not found.' });
@@ -52,6 +55,7 @@ const getCarById = async (req, res) => {
   }
 };
 
+// Delete a car listing by ID.
 const deleteCar = async (req, res) => {
   try {
     const { id } = req.params;
@@ -60,6 +64,7 @@ const deleteCar = async (req, res) => {
       return res.status(400).json({ message: 'Invalid car ID.' });
     }
 
+    // Find the car by ID and delete it.
     const deletedCar = await Car.findByIdAndDelete(id);
     if (!deletedCar) {
       return res.status(404).json({ message: 'Car not found.' });
@@ -116,6 +121,7 @@ const updateCar = async (req, res) => {
   }
 };
 
+// Helper function to determine which car is better based on a specific field and preference.
 const getBetterCar = (car1, car2, field, preference) => {
   if (car1[field] === car2[field]) return 'tie';
 
@@ -126,6 +132,7 @@ const getBetterCar = (car1, car2, field, preference) => {
   return car1[field] > car2[field] ? car1.name : car2.name;
 };
 
+// Compare two cars based on key performance metrics and return a summary.
 const compareCars = async (req, res) => {
   try {
     const { id1, id2 } = req.params;
@@ -139,7 +146,7 @@ const compareCars = async (req, res) => {
     if (!car1 || !car2) {
       return res.status(404).json({ message: 'One or both cars not found.' });
     }
-
+// Define the comparison criteria and determine which car performs better in each category.
     const comparison = {
       price: {
         better: getBetterCar(car1, car2, 'price', 'lower'),
@@ -162,7 +169,7 @@ const compareCars = async (req, res) => {
         car2: car2.top_speed
       }
     };
-
+// Count how many categories each car wins to determine an overall better performer.
     const winCount = {
       [car1.name]: 0,
       [car2.name]: 0
@@ -174,6 +181,7 @@ const compareCars = async (req, res) => {
       }
     });
 
+    // Generate a summary based on which car performs better in more categories.
     let summary = 'Both cars are equally matched.';
     if (winCount[car1.name] > winCount[car2.name]) {
       summary = `${car1.name} performs better in more categories than ${car2.name}.`;
@@ -181,6 +189,7 @@ const compareCars = async (req, res) => {
       summary = `${car2.name} performs better in more categories than ${car1.name}.`;
     }
 
+    
     return res.status(200).json({
      cars: [
   {
@@ -206,6 +215,7 @@ const compareCars = async (req, res) => {
   }
 };
 
+// Export the controller functions for use in routes.
 module.exports = {
   createCar,
   getCars,

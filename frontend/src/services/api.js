@@ -34,7 +34,8 @@ export const marketService = {
   createListing: (formData) =>
     api.post('/api/market', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
   updateListing: (id, formData) =>
-    api.put(`/api/market/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    api.put(`/api/market/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  deleteListing: (id) => api.delete(`/api/market/${id}`)
 };
 
 export const orderService = {

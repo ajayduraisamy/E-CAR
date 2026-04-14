@@ -1,3 +1,4 @@
+// AdminManageCars.jsx
 import { motion, AnimatePresence } from 'framer-motion';
 import { Pencil, Trash2, X, Search, CarFront } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -6,8 +7,10 @@ import GradientButton from '../components/GradientButton';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { carService } from '../services/api';
 
+// For simplicity, we're using the same form for editing. In a real app, you might want to separate this into its own component and handle both add/edit logic there.
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
+// Initial form state for editing a car
 const initialEditForm = {
   name: '',
   brand: '',
@@ -29,6 +32,7 @@ const initialEditForm = {
   gps: 'true'
 };
 
+// Note: This component focuses on editing and deleting cars. Adding new cars can be handled in a separate component or by reusing the edit form with some adjustments.
 function AdminManageCars() {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,6 +50,7 @@ function AdminManageCars() {
   const [deletingCar, setDeletingCar] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  // Fetch cars from the backend
   const fetchCars = async () => {
     try {
       setLoading(true);
@@ -58,16 +63,18 @@ function AdminManageCars() {
       setLoading(false);
     }
   };
-
+// Fetch cars on component mount
   useEffect(() => {
     fetchCars();
   }, []);
 
+  // Filter cars based on search term
   const filteredCars = cars.filter((car) =>
     car.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     car.brand.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Handle edit button click - populate form with existing car data
   const handleEditClick = (car) => {
     setEditingCar(car);
     setEditForm({
@@ -94,10 +101,12 @@ function AdminManageCars() {
     setEditMessage('');
   };
 
+  // Handle form input changes for editing
   const handleEditInput = (e) => {
     setEditForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // Handle form submission for updating a car
   const handleUpdateCar = async (e) => {
     e.preventDefault();
     setEditMessage('');
@@ -121,10 +130,12 @@ function AdminManageCars() {
     }
   };
 
+  // Handle delete button click - show confirmation modal
   const handleDeleteClick = (car) => {
     setDeletingCar(car);
   };
 
+  // Handle confirm deletion
   const handleConfirmDelete = async () => {
     try {
       setDeleteLoading(true);

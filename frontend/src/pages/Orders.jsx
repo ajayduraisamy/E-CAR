@@ -1,3 +1,4 @@
+// This page displays the user's order history with details like order ID, price, date, and payment status.
 import { motion } from 'framer-motion';
 import { ShoppingCart, Calendar, CheckCircle, Clock, Car } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -7,11 +8,13 @@ import { orderService } from '../services/api';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
+// Orders.jsx
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Fetch user's orders on component mount
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -24,11 +27,12 @@ function Orders() {
       setLoading(false);
     }
   };
-
+// Fetch orders when the component mounts
   useEffect(() => {
     fetchOrders();
   }, []);
 
+  // Format date to a more readable format
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-IN', {
       day: 'numeric',

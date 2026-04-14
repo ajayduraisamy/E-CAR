@@ -2,6 +2,7 @@
 // MongoDB connection setup using Mongoose.
 const mongoose = require('mongoose');
 
+// Connect to MongoDB using the connection string from environment variables.
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI);
@@ -12,5 +13,6 @@ const connectDB = async () => {
   }
 };
 
+// Export the connectDB function for use in server.js.
 module.exports = connectDB;
 

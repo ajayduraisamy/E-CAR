@@ -4,10 +4,12 @@ const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const Payment = require('../models/Payment');
 
+// Simulate transaction ID generation
 const generateTransactionId = () => {
   return `TXN_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
 };
 
+// Simulated payment processing
 const payOrder = async (req, res) => {
   try {
     const { orderId, amount, method, card_last4, upi_id } = req.body;
@@ -15,15 +17,15 @@ const payOrder = async (req, res) => {
     if (!orderId || !mongoose.Types.ObjectId.isValid(orderId)) {
       return res.status(400).json({ message: 'Valid orderId is required.' });
     }
-
+// Validate payment details
     if (amount === undefined || Number(amount) <= 0) {
       return res.status(400).json({ message: 'Valid amount is required.' });
     }
-
+// Validate payment method
     if (!method || !['card', 'upi'].includes(method)) {
       return res.status(400).json({ message: 'method must be card or upi.' });
     }
-
+// Validate card details if method is card    
     if (method === 'card') {
       if (!card_last4 || !/^\d{4}$/.test(String(card_last4))) {
         return res.status(400).json({ message: 'card_last4 must be exactly 4 digits.' });

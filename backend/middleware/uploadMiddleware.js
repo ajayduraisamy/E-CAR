@@ -11,10 +11,12 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+// Configure multer storage and file filtering.
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadsDir);
   },
+  // Generate unique filenames to prevent collisions.
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     const uniqueName = `${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
@@ -22,9 +24,10 @@ const storage = multer.diskStorage({
   }
 });
 
+// Only allow image files and limit size to 5MB.
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-
+// Validate file type.
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
@@ -32,6 +35,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// Create multer instance with defined storage, file filter, and size limits.
 const upload = multer({
   storage,
   fileFilter,
@@ -40,5 +44,6 @@ const upload = multer({
   }
 });
 
+// Export the configured multer instance for use in routes.
 module.exports = upload;
 

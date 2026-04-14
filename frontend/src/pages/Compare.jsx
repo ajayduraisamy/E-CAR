@@ -1,3 +1,4 @@
+// Compare.jsx - Page for comparing two cars side-by-side for a quick comparison experience.
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRightLeft, ShoppingCart, X, CreditCard, Wallet } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -9,6 +10,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { useAuth } from '../context/AuthContext';
 import { carService, orderService, paymentService } from '../services/api';
 
+// Define the specifications we want to compare and their display labels/suffixes.
 const specMeta = [
   { key: 'price', label: 'Price', suffix: '' },
   { key: 'horsepower', label: 'Horsepower', suffix: 'HP' },
@@ -16,6 +18,7 @@ const specMeta = [
   { key: 'top_speed', label: 'Top Speed', suffix: 'km/h' }
 ];
 
+// Compare component for comparing two cars side-by-side and placing orders directly from the comparison results.
 function Compare() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -35,8 +38,10 @@ function Compare() {
   const [orderLoading, setOrderLoading] = useState(false);
   const [orderMessage, setOrderMessage] = useState('');
 
+  // Fetch all cars on component mount to populate the dropdowns for comparison.
   useEffect(() => {
     const fetchCars = async () => {
+      // Fetch all cars
       try {
         setLoadingCars(true);
         setError('');
@@ -48,15 +53,17 @@ function Compare() {
         setLoadingCars(false);
       }
     };
-
+// Initial fetch of cars for dropdowns
     fetchCars();
   }, []);
 
+  // Determine if the Compare button should be disabled based on selection and loading state.
   const isCompareDisabled = useMemo(
     () => !selectedCar1 || !selectedCar2 || selectedCar1 === selectedCar2 || loadingCompare,
     [selectedCar1, selectedCar2, loadingCompare]
   );
 
+  // Handle the comparison logic by calling the backend API with the selected car IDs and updating the state with the results.
   const handleCompare = async () => {
     try {
       setLoadingCompare(true);
@@ -70,6 +77,7 @@ function Compare() {
     }
   };
 
+  // Handle the order placement logic by calling the backend API with the selected car and payment details and updating the state with the results.
   const handleOrderClick = (car) => {
     if (!isAuthenticated) {
       navigate('/login', { state: { from: '/compare' } });
@@ -82,6 +90,7 @@ function Compare() {
     setOrderMessage('');
   };
 
+  // Handle the actual order placement by calling the backend API with the selected car and payment details and updating the state with the results.
   const handlePlaceOrder = async () => {
     try {
       setOrderLoading(true);
@@ -102,6 +111,7 @@ function Compare() {
         method: paymentMethod
       };
 
+      // Validate payment details based on selected method
       if (paymentMethod === 'card') {
         if (!cardLast4 || cardLast4.length !== 4) {
           setOrderMessage('Please enter last 4 digits of card');
@@ -110,6 +120,7 @@ function Compare() {
         }
         paymentPayload.card_last4 = cardLast4;
       } else {
+        // UPI validation (basic check, can be enhanced)
         if (!upiId) {
           setOrderMessage('Please enter UPI ID');
           setOrderLoading(false);
@@ -118,6 +129,7 @@ function Compare() {
         paymentPayload.upi_id = upiId;
       }
 
+      // Call payment API
       await paymentService.payOrder(paymentPayload);
 
       setOrderMessage('Order placed successfully!');

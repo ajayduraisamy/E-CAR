@@ -2,6 +2,7 @@
 // Payment model for simulated payment records.
 const mongoose = require('mongoose');
 
+// Payment schema with reference to Order and User, plus payment details.
 const paymentSchema = new mongoose.Schema(
   {
     order: {
@@ -48,5 +49,6 @@ const paymentSchema = new mongoose.Schema(
   }
 );
 
+// Export the Payment model for use in controllers and routes.
 module.exports = mongoose.model('Payment', paymentSchema);
 

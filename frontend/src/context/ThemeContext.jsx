@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-
+// ThemeContext.jsx - Manages light/dark theme state and persistence
 const ThemeContext = createContext(null);
 const THEME_KEY = 'ecar_theme';
 
+// Get initial theme from localStorage or system preference
 const getInitialTheme = () => {
   const storedTheme = localStorage.getItem(THEME_KEY);
   if (storedTheme) return storedTheme;
@@ -10,7 +11,7 @@ const getInitialTheme = () => {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   return prefersDark ? 'dark' : 'light';
 };
-
+// ThemeProvider component to wrap the app and provide theme context
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(getInitialTheme);
 
@@ -22,6 +23,7 @@ export const ThemeProvider = ({ children }) => {
     localStorage.setItem(THEME_KEY, theme);
   }, [theme]);
 
+  // Toggle between light and dark themes
   const toggleTheme = () => {
     setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
   };
@@ -31,6 +33,7 @@ export const ThemeProvider = ({ children }) => {
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 
+// Custom hook to use theme context
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {

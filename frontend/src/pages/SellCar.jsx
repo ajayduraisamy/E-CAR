@@ -1,9 +1,11 @@
+// This page allows users to create a new car listing with details with image.
 import { motion } from 'framer-motion';
 import { ImagePlus, UploadCloud } from 'lucide-react';
 import { useState } from 'react';
 import GradientButton from '../components/GradientButton';
 import { marketService } from '../services/api';
 
+// Initial form state
 const initialForm = {
   title: '',
   price: '',
@@ -12,6 +14,7 @@ const initialForm = {
   location: ''
 };
 
+// Form to create a new car listing with image upload support.
 function SellCar() {
   const [form, setForm] = useState(initialForm);
   const [image, setImage] = useState(null);
@@ -19,26 +22,30 @@ function SellCar() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // Handle input changes for text fields
   const handleChange = (event) => {
     setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
+  // Handle image file selection
   const handleImageChange = (event) => {
     const file = event.target.files?.[0];
     if (file) setImage(file);
   };
 
+  // Handle form submission to create a new listing
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
     setSuccess('');
-
+// Create FormData and append form fields and image
     try {
       setLoading(true);
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => formData.append(key, value));
       if (image) formData.append('image', image);
 
+      // Create listing
       await marketService.createListing(formData);
 
       setSuccess('Listing created successfully.');

@@ -1,3 +1,4 @@
+// AdminOrders.jsx - Admin dashboard page for managing and viewing all customer orders.
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, User, Car, Calendar, CheckCircle, Clock, Search, Filter, DollarSign, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -5,8 +6,10 @@ import ErrorState from '../components/ErrorState';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { orderService } from '../services/api';
 
+// Note: Ensure your backend has the route GET /api/order that returns all orders for admin users.
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
+// AdminOrders component definition
 function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,8 +18,9 @@ function AdminOrders() {
   // Filters State
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [roleFilter, setRoleFilter] = useState('all'); // Added back as you requested
+  const [roleFilter, setRoleFilter] = useState('all'); 
 
+  // Fetch all orders for admin view
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -30,6 +34,7 @@ function AdminOrders() {
     }
   };
 
+  // Fetch orders on component mount
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -51,6 +56,7 @@ function AdminOrders() {
     return matchesSearch && matchesStatus && matchesRole;
   });
 
+  // Calculate stats
   const stats = {
     total: orders.length,
     pending: orders.filter(o => o.status === 'pending').length,
@@ -58,6 +64,7 @@ function AdminOrders() {
     totalRevenue: orders.reduce((sum, o) => sum + (o.amount || 0), 0)
   };
 
+  // Format date utility
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-IN', {
       day: 'numeric',

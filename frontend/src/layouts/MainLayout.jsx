@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
+// MainLayout component that wraps around all pages, providing a consistent layout with a navbar and footer.
 function MainLayout() {
   return (
     <div className="min-h-screen">
@@ -14,5 +15,6 @@ function MainLayout() {
   );
 }
 
+// Export the MainLayout component for use in routing.
 export default MainLayout;
 

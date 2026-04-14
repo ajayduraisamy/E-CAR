@@ -2,6 +2,7 @@
 // User model for authentication and role-based access.
 const mongoose = require('mongoose');
 
+// User schema with name, email, password, and role (user/admin).
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -31,6 +32,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true
   }
 );
-
+// Export the User model for use in authentication and authorization.
 module.exports = mongoose.model('User', userSchema);
 

@@ -2,6 +2,7 @@
 // Marketplace listing model for buy/sell posts.
 const mongoose = require('mongoose');
 
+// Listing schema with validation and user reference.
 const listingSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
@@ -17,5 +18,6 @@ const listingSchema = new mongoose.Schema(
   }
 );
 
+// Export the Listing model
 module.exports = mongoose.model('Listing', listingSchema);
 

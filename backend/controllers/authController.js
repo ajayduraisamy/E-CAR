@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+
+// Generate JWT token for authenticated users.
 const generateToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role },
@@ -12,6 +14,7 @@ const generateToken = (user) => {
   );
 };
 
+// Register a new user.
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -52,24 +55,30 @@ const registerUser = async (req, res) => {
   }
 };
 
+
+// Login an existing user.
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Validate input
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required.' });
     }
 
+    // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
+    // Compare provided password with stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
+    // Generate JWT token for the authenticated user
     const token = generateToken(user);
 
     return res.status(200).json({
@@ -87,6 +96,7 @@ const loginUser = async (req, res) => {
   }
 };
 
+// Export the controller functions for use in routes.
 module.exports = {
   registerUser,
   loginUser

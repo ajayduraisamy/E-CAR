@@ -17,12 +17,14 @@ import AdminAddCar from "./pages/AdminAddCar";
 import AdminManageCars from "./pages/AdminManageCars";
 
 
+// Main app component defining routes and page transitions using framer-motion.
 const pageVariants = {
   initial: { opacity: 0, y: 14 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -10 }
 };
 
+// Wrapper component for page transitions.
 const PageShell = ({ children }) => (
   <motion.div
     variants={pageVariants}
@@ -35,6 +37,7 @@ const PageShell = ({ children }) => (
   </motion.div>
 );
 
+// Simple 404 Not Found page component.
 const NotFound = () => (
   <div className="mx-auto max-w-2xl rounded-3xl border border-slate-200/70 bg-white/70 p-10 text-center shadow-2xl backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
     <h1 className="text-3xl font-bold">Page Not Found</h1>
@@ -44,6 +47,7 @@ const NotFound = () => (
   </div>
 );
 
+// Main App component with route definitions and protected routes for authenticated users and admin-only access.
 function App() {
   const location = useLocation();
 
@@ -86,5 +90,6 @@ function App() {
   );
 }
 
+// Exporting the main App component as default.
 export default App;
 

@@ -14,4 +14,5 @@ router.get("/", auth, admin, async (req, res) => {
   }
 });
 
+// export the router
 module.exports = router;

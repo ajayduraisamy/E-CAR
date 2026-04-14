@@ -1,3 +1,4 @@
+// This component displays the user's car listings and allows them to edit or delete their listings.
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Phone, PlusCircle, Trash2, X, Edit2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -8,8 +9,10 @@ import GradientButton from '../components/GradientButton';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { marketService } from '../services/api';
 
+// Base URL for images - adjust if your backend serves them from a different path
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
+//  MyListings.jsx
 function MyListings() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,6 +24,7 @@ function MyListings() {
   const [editForm, setEditForm] = useState({ title: '', price: '', description: '', contact: '', location: '', image: null });
   const [editLoading, setEditLoading] = useState(false);
 
+  // Fetch user's listings on component mount
   const openEditModal = (listing) => {
     setEditingListing(listing);
     setEditForm({
@@ -33,6 +37,7 @@ function MyListings() {
     });
   };
 
+  // Fetch user's listings on component mount
   const handleEditInput = (e) => {
     const { name, value, files } = e.target;
     if (name === 'image') {
@@ -42,6 +47,7 @@ function MyListings() {
     }
   };
 
+  // Update listing submit handler
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     if (!editingListing) return;
@@ -65,6 +71,7 @@ function MyListings() {
     }
   };
 
+  // Fetch user's listings on component mount
   const fetchListings = async () => {
     try {
       setLoading(true);
@@ -77,15 +84,17 @@ function MyListings() {
       setLoading(false);
     }
   };
-
+// Fetch user's listings on component mount
   useEffect(() => {
     fetchListings();
   }, []);
 
+  // Delete listing
   const handleDeleteClick = (listing) => {
     setDeletingListing(listing);
   };
 
+  // Confirm delete action
   const handleConfirmDelete = async () => {
     if (!deletingListing) return;
     try {
@@ -101,6 +110,7 @@ function MyListings() {
     }
   };
 
+  // Helper function to format dates in a user-friendly way
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-IN', {
       day: 'numeric',
