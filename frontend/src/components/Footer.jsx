@@ -14,7 +14,7 @@ function Footer() {
     <footer className="mt-20 border-t border-white/20 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-slate-200">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-10">
         <div>
-          <h3 className="text-2xl font-bold text-white">E-CAR</h3>
+          <h3 className="text-2xl font-bold text-white">Vehicle Vault (E-CAR)</h3>
           <p className="mt-3 max-w-md text-sm text-slate-300">
             A modern platform for car comparison, marketplace listings, and secure purchase flow.
           </p>

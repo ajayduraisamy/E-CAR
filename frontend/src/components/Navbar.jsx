@@ -66,7 +66,7 @@ function Navbar() {
             <CarFront className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-lg font-bold tracking-tight">E-CAR</p>
+            <p className="text-lg font-bold tracking-tight"> Vehicle Vault (E-CAR)</p>
             <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
             Comparison & Marketplace
             </p>
