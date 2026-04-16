@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Fuel, Gauge, Zap, ChevronDown, ChevronUp } from 'lucide-react';
+import { Fuel, Gauge, Zap, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 
 // Base URL for API calls, can be set via environment variable or defaults to localhost
@@ -8,6 +8,29 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 // CarCard component to display car information in a card format with expandable details and order functionality.
 function CarCard({ car, onOrder }) {
   const [showDetails, setShowDetails] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Get all images (handle both single image and multiple images)
+  const carImages = car.images?.length > 0 
+    ? car.images 
+    : car.image 
+      ? [car.image] 
+      : ['https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80'];
+
+  const nextImage = (e) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev + 1) % carImages.length);
+  };
+
+  const prevImage = (e) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 0 ? carImages.length - 1 : prev - 1));
+  };
+
+  const goToImage = (e, index) => {
+    e.stopPropagation();
+    setCurrentImageIndex(index);
+  };
 
   // Main render of the car card
   return (
@@ -18,18 +41,70 @@ function CarCard({ car, onOrder }) {
     >
       {/* Image Section */}
       <div className="relative h-52 overflow-hidden">
+        {/* Main Image */}
         <img
-          src={car.image ? `${API_BASE}/${car.image}` : 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80'}
+          src={carImages[currentImageIndex]?.startsWith('http') 
+            ? carImages[currentImageIndex] 
+            : `${API_BASE}/${carImages[currentImageIndex]}`}
           alt={car.name}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between text-white">
+
+        {/* Navigation Arrows - Only show if multiple images */}
+        {carImages.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={prevImage}
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-slate-800/90 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white dark:hover:bg-slate-700 z-20"
+            >
+              <ChevronLeft size={16} className="dark:text-white" />
+            </button>
+            <button
+              type="button"
+              onClick={nextImage}
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-slate-800/90 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white dark:hover:bg-slate-700 z-20"
+            >
+              <ChevronRight size={16} className="dark:text-white" />
+            </button>
+          </>
+        )}
+
+        {/* Image Indicators/Dots */}
+        {carImages.length > 1 && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+            {carImages.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={(e) => goToImage(e, index)}
+                className={`w-1.5 h-1.5 rounded-full transition-all ${
+                  index === currentImageIndex 
+                    ? 'bg-white w-3' 
+                    : 'bg-white/60 hover:bg-white/80'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
+        
+        {/* Image Counter Badge */}
+        {carImages.length > 1 && (
+          <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-lg z-20">
+            {currentImageIndex + 1}/{carImages.length}
+          </div>
+        )}
+
+        {/* Title and Price */}
+        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between text-white z-10">
           <div>
             <h3 className="text-lg font-semibold">{car.name}</h3>
             <p className="text-xs uppercase tracking-[0.2em] text-white/80">{car.brand}</p>
           </div>
-          <p className="rounded-xl bg-black/50 px-3 py-1 text-sm font-semibold">₹ {car.price}</p>
+          <p className="rounded-xl bg-black/50 backdrop-blur-sm px-3 py-1 text-sm font-semibold">₹ {car.price}</p>
         </div>
       </div>
 
@@ -80,7 +155,6 @@ function CarCard({ car, onOrder }) {
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-           
               <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 p-4 text-[11px]">
                 <DetailRow label="Engine" value={car.engine} />
                 <DetailRow label="Torque" value={car.torque} />

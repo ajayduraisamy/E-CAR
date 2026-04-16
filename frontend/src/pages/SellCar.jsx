@@ -4,6 +4,7 @@ import { ImagePlus, UploadCloud } from 'lucide-react';
 import { useState } from 'react';
 import GradientButton from '../components/GradientButton';
 import { marketService } from '../services/api';
+import { showSuccess, showError } from '../utils/toast';
 
 // Initial form state
 const initialForm = {
@@ -35,28 +36,40 @@ function SellCar() {
 
   // Handle form submission to create a new listing
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError('');
-    setSuccess('');
-// Create FormData and append form fields and image
-    try {
-      setLoading(true);
-      const formData = new FormData();
-      Object.entries(form).forEach(([key, value]) => formData.append(key, value));
-      if (image) formData.append('image', image);
+  event.preventDefault();
+  setError('');
+  setSuccess('');
 
-      // Create listing
-      await marketService.createListing(formData);
+  try {
+    setLoading(true);
 
-      setSuccess('Listing created successfully.');
-      setForm(initialForm);
-      setImage(null);
-    } catch (err) {
-      setError(err?.response?.data?.message || 'Unable to create listing.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    const formData = new FormData();
+    Object.entries(form).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
+
+    if (image) formData.append('image', image);
+
+    await marketService.createListing(formData);
+
+    //  Toast Success
+    showSuccess("Listing created successfully 🚗");
+
+    setForm(initialForm);
+    setImage(null);
+
+  } catch (err) {
+    const message =
+      err?.response?.data?.message || 'Unable to create listing.';
+
+    //  Toast Error
+    showError(message);
+
+    setError(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="pb-8">

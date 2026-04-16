@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import AppToast from './components/AppToast';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -52,41 +53,48 @@ function App() {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<PageShell><Home /></PageShell>} />
-          <Route path="/login" element={<PageShell><Login /></PageShell>} />
-          <Route path="/register" element={<PageShell><Register /></PageShell>} />
-          <Route path="/compare" element={<PageShell><Compare /></PageShell>} />
-          <Route path="/marketplace" element={<PageShell><Marketplace /></PageShell>} />
-          <Route path="/orders" element={<PageShell><Orders /></PageShell>} />
-          <Route path="/my-listings" element={<PageShell><MyListings /></PageShell>} />
-          <Route path="/admin/orders" element={<PageShell><AdminOrders /></PageShell>} />
-          <Route path="/admin/users" element={<PageShell><AdminUsers /></PageShell>} />
-          <Route path="/admin/add-car" element={<PageShell><AdminAddCar /></PageShell>} />
-          <Route path="/admin/manage-cars" element={<PageShell><AdminManageCars /></PageShell>} />
-          <Route
-            path="/sell"
-            element={
-              <ProtectedRoute>
-                <PageShell><SellCar /></PageShell>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute adminOnly>
-                <PageShell><AdminDashboard /></PageShell>
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/home" element={<Navigate to="/" replace />} />
-          <Route path="*" element={<PageShell><NotFound /></PageShell>} />
-        </Route>
-      </Routes>
-    </AnimatePresence>
+    <>
+      <AppToast />   {/* ✅ CORRECT PLACE */}
+
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<PageShell><Home /></PageShell>} />
+            <Route path="/login" element={<PageShell><Login /></PageShell>} />
+            <Route path="/register" element={<PageShell><Register /></PageShell>} />
+            <Route path="/compare" element={<PageShell><Compare /></PageShell>} />
+            <Route path="/marketplace" element={<PageShell><Marketplace /></PageShell>} />
+            <Route path="/orders" element={<PageShell><Orders /></PageShell>} />
+            <Route path="/my-listings" element={<PageShell><MyListings /></PageShell>} />
+            <Route path="/admin/orders" element={<PageShell><AdminOrders /></PageShell>} />
+            <Route path="/admin/users" element={<PageShell><AdminUsers /></PageShell>} />
+            <Route path="/admin/add-car" element={<PageShell><AdminAddCar /></PageShell>} />
+            <Route path="/admin/manage-cars" element={<PageShell><AdminManageCars /></PageShell>} />
+
+            <Route
+              path="/sell"
+              element={
+                <ProtectedRoute>
+                  <PageShell><SellCar /></PageShell>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute adminOnly>
+                  <PageShell><AdminDashboard /></PageShell>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path="/home" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<PageShell><NotFound /></PageShell>} />
+          </Route>
+        </Routes>
+      </AnimatePresence>
+    </>
   );
 }
 

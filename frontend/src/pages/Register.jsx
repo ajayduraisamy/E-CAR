@@ -1,5 +1,6 @@
 // This file defines the Register component, which provides a user interface for new users to create an account on the E-CAR platform. It includes form fields for name, email, password, and role selection, along with error handling and loading states during the registration process.
 import { motion } from 'framer-motion';
+import { showSuccess, showError } from '../utils/toast';
 import { KeyRound, Mail, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -29,20 +30,41 @@ function Register() {
 
   // Handle form submission
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError('');
-//  client-side validation
-    try {
-      setLoading(true);
-      const { data } = await authService.register(form);
-      saveAuth(data);
-      navigate(data?.user?.role === 'admin' ? '/admin' : '/', { replace: true });
-    } catch (err) {
-      setError(err?.response?.data?.message || 'Registration failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  event.preventDefault();
+  setError('');
+
+  try {
+    setLoading(true);
+
+    const { data } = await authService.register(form);
+
+  
+    showSuccess("Registration successful 🎉");
+
+    // save auth
+    saveAuth(data);
+
+   
+    setTimeout(() => {
+      navigate(
+        data?.user?.role === 'admin' ? '/admin' : '/',
+        { replace: true }
+      );
+    }, 1500);
+
+  } catch (err) {
+    const message =
+      err?.response?.data?.message ||
+      'Registration failed. Please try again.';
+
+    
+    showError(message);
+
+    setError(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex min-h-[78vh] items-center justify-center">

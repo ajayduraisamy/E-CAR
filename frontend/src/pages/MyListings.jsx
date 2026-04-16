@@ -8,6 +8,7 @@ import ErrorState from '../components/ErrorState';
 import GradientButton from '../components/GradientButton';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { marketService } from '../services/api';
+import { showSuccess, showError } from '../utils/toast';
 
 // Base URL for images - adjust if your backend serves them from a different path
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
@@ -48,28 +49,41 @@ function MyListings() {
   };
 
   // Update listing submit handler
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    if (!editingListing) return;
-    try {
-      setEditLoading(true);
-      const formData = new FormData();
-      formData.append('title', editForm.title);
-      formData.append('price', editForm.price);
-      formData.append('description', editForm.description);
-      formData.append('contact', editForm.contact);
-      formData.append('location', editForm.location);
-      if (editForm.image) formData.append('image', editForm.image);
-      
-      await marketService.updateListing(editingListing._id, formData);
-      setEditingListing(null);
-      fetchListings(); // Refresh listings after update
-    } catch (err) {
-      setError('Failed to update listing.');
-    } finally {
-      setEditLoading(false);
-    }
-  };
+ const handleEditSubmit = async (e) => {
+  e.preventDefault();
+  if (!editingListing) return;
+
+  try {
+    setEditLoading(true);
+
+    const formData = new FormData();
+    formData.append('title', editForm.title);
+    formData.append('price', editForm.price);
+    formData.append('description', editForm.description);
+    formData.append('contact', editForm.contact);
+    formData.append('location', editForm.location);
+
+    if (editForm.image) formData.append('image', editForm.image);
+
+    await marketService.updateListing(editingListing._id, formData);
+
+   
+    showSuccess("Listing updated successfully ✏️");
+
+    setEditingListing(null);
+    fetchListings();
+
+  } catch (err) {
+    const message = 'Failed to update listing';
+
+   
+    showError(message);
+
+    setError(message);
+  } finally {
+    setEditLoading(false);
+  }
+};
 
   // Fetch user's listings on component mount
   const fetchListings = async () => {
@@ -96,19 +110,33 @@ function MyListings() {
 
   // Confirm delete action
   const handleConfirmDelete = async () => {
-    if (!deletingListing) return;
-    try {
-      setDeleteLoading(true);
-      // Backend call added
-      await marketService.deleteListing(deletingListing._id); 
-      setListings((prev) => prev.filter((l) => l._id !== deletingListing._id));
-      setDeletingListing(null);
-    } catch (err) {
-      setError('Failed to delete listing.');
-    } finally {
-      setDeleteLoading(false);
-    }
-  };
+  if (!deletingListing) return;
+
+  try {
+    setDeleteLoading(true);
+
+    await marketService.deleteListing(deletingListing._id);
+
+    setListings((prev) =>
+      prev.filter((l) => l._id !== deletingListing._id)
+    );
+
+   
+    showSuccess(`Listing "${deletingListing.title}" deleted 🗑️`);
+
+    setDeletingListing(null);
+
+  } catch (err) {
+    const message = 'Failed to delete listing';
+
+   
+    showError(message);
+
+    setError(message);
+  } finally {
+    setDeleteLoading(false);
+  }
+};
 
   // Helper function to format dates in a user-friendly way
   const formatDate = (dateString) => {

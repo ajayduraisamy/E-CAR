@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import GradientButton from '../components/GradientButton';
 import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/api';
+import { showSuccess, showError } from '../utils/toast';
 
 // Login page with form validation and error handling.
 function Login() {
@@ -29,20 +30,40 @@ function Login() {
 
   //// Handle form submission for login, including API call and error handling.
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError('');
+  event.preventDefault();
+  setError('');
 
-    try {
-      setLoading(true);
-      const { data } = await authService.login(form);
-      saveAuth(data);
-      navigate(data?.user?.role === 'admin' ? '/admin' : from, { replace: true });
-    } catch (err) {
-      setError(err?.response?.data?.message || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+
+    const { data } = await authService.login(form);
+
+  
+    showSuccess("Login successful ");
+
+    saveAuth(data);
+
+    
+    setTimeout(() => {
+      navigate(
+        data?.user?.role === 'admin' ? '/admin' : from,
+        { replace: true }
+      );
+    }, 1500);
+
+  } catch (err) {
+    const message =
+      err?.response?.data?.message ||
+      'Login failed. Please try again.';
+
+   
+    showError(message);
+
+    setError(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex min-h-[78vh] items-center justify-center">

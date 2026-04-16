@@ -8,7 +8,10 @@ const carSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     brand: { type: String, required: true, trim: true },
     price: { type: Number, required: true, min: 0 },
-    image: { type: String, default: '' },
+    images: {
+  type: [String],   // stores file paths
+  default: []
+},
 
     // Engine & performance
     engine: { type: String, required: true, trim: true },

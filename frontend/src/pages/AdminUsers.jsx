@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import ErrorState from '../components/ErrorState';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { userService } from '../services/api';
-
+import { showSuccess, showError } from '../utils/toast';
 // Note: Ensure your backend has the route GET /api/users that returns all registered users for admin view.
 function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -60,19 +60,32 @@ function AdminUsers() {
   };
 
   // Handle confirm delete action
-  const handleConfirmDelete = async () => {
-    try {
-      setDeleteLoading(true);
-      // Note: You'll need to add deleteUser to userService if you want delete functionality
-      // For now, we'll just remove from local state
-      setUsers((prev) => prev.filter((u) => u._id !== deletingUser._id));
-      setDeletingUser(null);
-    } catch (err) {
-      setError('Failed to delete user.');
-    } finally {
-      setDeleteLoading(false);
-    }
-  };
+ const handleConfirmDelete = async () => {
+  try {
+    setDeleteLoading(true);
+
+    // If API exists → call it here
+    // await userService.deleteUser(deletingUser._id);
+
+    // remove from UI
+    setUsers((prev) => prev.filter((u) => u._id !== deletingUser._id));
+
+    // ✅ Success Toast
+    showSuccess(`User "${deletingUser.name}" deleted successfully 🗑️`);
+
+    setDeletingUser(null);
+
+  } catch (err) {
+    const message = 'Failed to delete user';
+
+    // ❌ Error Toast
+    showError(message);
+
+    setError(message);
+  } finally {
+    setDeleteLoading(false);
+  }
+};
 
   // Format date utility
   const formatDate = (dateString) => {

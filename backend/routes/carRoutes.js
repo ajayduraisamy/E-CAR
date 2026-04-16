@@ -20,8 +20,9 @@ const router = express.Router();
 router.get('/', getCars);
 router.get('/compare/:id1/:id2', compareCars);
 router.get('/:id', getCarById);
-router.post('/', authMiddleware, adminMiddleware, upload.single('image'), createCar);
-router.put('/:id', authMiddleware, adminMiddleware, upload.single('image'), updateCar);
+router.post('/', authMiddleware, adminMiddleware, upload.array('images', 4), createCar);
+
+router.put('/:id', authMiddleware, adminMiddleware, upload.array('images', 4), updateCar);
 router.delete('/:id', authMiddleware, adminMiddleware, deleteCar);
 
 // Note: No public POST/PUT/DELETE routes for cars, only admins can modify car data.

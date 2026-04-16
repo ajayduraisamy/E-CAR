@@ -1,6 +1,7 @@
 // AdminAddCar.jsx
 
 import { motion } from 'framer-motion';
+import { showSuccess, showError } from '../utils/toast';
 import { useEffect, useMemo, useState } from 'react';
 
 import ErrorState from '../components/ErrorState';
@@ -37,7 +38,7 @@ function AdminAddCar() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [carForm, setCarForm] = useState(initialCarForm);
-  const [carImage, setCarImage] = useState(null);
+  const [carImage, setCarImage] = useState([]);
   const [formLoading, setFormLoading] = useState(false);
   const [formMessage, setFormMessage] = useState('');
 
@@ -80,27 +81,47 @@ function AdminAddCar() {
 
   // Handle form submission to create a new car
   const handleCreateCar = async (event) => {
-    event.preventDefault();
-    setFormMessage('');
-    setError('');
-// Create FormData for multipart/form-data request
-    try {
-      setFormLoading(true);
-      const formData = new FormData();
-      Object.entries(carForm).forEach(([key, value]) => formData.append(key, value));
-      if (carImage) formData.append('image', carImage);
+  event.preventDefault();
+  setFormMessage('');
+  setError('');
 
-      await carService.addCar(formData);
-      setCarForm(initialCarForm);
-      setCarImage(null);
-      setFormMessage('Car added successfully.');
-      fetchDashboardData();
-    } catch (err) {
-      setError(err?.response?.data?.message || 'Unable to add car.');
-    } finally {
-      setFormLoading(false);
-    }
-  };
+  try {
+    setFormLoading(true);
+
+    const formData = new FormData();
+    Object.entries(carForm).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
+
+   if (carImage && carImage.length > 0) {
+    for (let i = 0; i < carImage.length; i++) {
+    formData.append('images', carImage[i]);
+  }
+}
+
+    await carService.addCar(formData);
+
+    
+    showSuccess("Car added successfully 🚗");
+
+    // reset form
+    setCarForm(initialCarForm);
+    setCarImage([]);
+
+    fetchDashboardData();
+
+  } catch (err) {
+    const message =
+      err?.response?.data?.message || 'Unable to add car.';
+
+  
+    showError(message);
+
+    setError(message);
+  } finally {
+    setFormLoading(false);
+  }
+};
 
 
 
@@ -113,7 +134,7 @@ function AdminAddCar() {
         </p>
       </section>
 
-      {error && <ErrorState message={error} />}
+      
 
     
 
@@ -211,15 +232,19 @@ function AdminAddCar() {
             </select>
           </label>
 
-          <label className="block sm:col-span-2">
-            <span className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-300">Car Image</span>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(event) => setCarImage(event.target.files?.[0] || null)}
-              className="block w-full rounded-xl border border-slate-200 bg-white/70 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900/70"
-            />
-          </label>
+         <label className="block sm:col-span-2">
+  <span className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-300">
+    Car Images (Max 4)
+  </span>
+
+  <input
+    type="file"
+    accept="image/*"
+    multiple   // ✅ ADD THIS
+    onChange={(event) => setCarImage(event.target.files)}  // ✅ CHANGE THIS
+    className="block w-full rounded-xl border border-slate-200 bg-white/70 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900/70"
+  />
+</label>
 
           <div className="sm:col-span-2">
             <GradientButton type="submit" disabled={formLoading} className="w-full">

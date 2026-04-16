@@ -6,14 +6,14 @@ const Car = require('../models/Car');
 // Create a new car listing.
 const createCar = async (req, res) => {
   try {
-    const imagePath = req.file
-      ? `uploads/${req.file.filename}`
-      : req.body.image || '';
+  const images = req.files?.length
+  ? req.files.map(file => `uploads/${file.filename}`)
+  : [];
 
-    const carData = {
-      ...req.body,
-      image: imagePath
-    };
+const carData = {
+  ...req.body,
+  images
+};
 // Convert string booleans to actual booleans
     const car = await Car.create(carData);
     return res.status(201).json(car);
@@ -86,10 +86,12 @@ const updateCar = async (req, res) => {
 
     const updateData = { ...req.body };
     
-    // Handle image upload
-    if (req.file) {
-      updateData.image = `uploads/${req.file.filename}`;
-    }
+   if (req.files && req.files.length > 0) {
+  updateData.images = req.files.map(file => `uploads/${file.filename}`);
+} else {
+  const existingCar = await Car.findById(id);
+  updateData.images = existingCar.images; // keep old images
+}
 
     // Convert string booleans to actual booleans
     if (updateData.abs !== undefined) {
@@ -197,14 +199,14 @@ const compareCars = async (req, res) => {
     name: car1.name,
     brand: car1.brand,
     price: car1.price,
-    image: car1.image
+    image: car1.images?.[0]
   },
   {
     _id: car2._id,
     name: car2.name,
     brand: car2.brand,
     price: car2.price,
-    image: car2.image
+    image: car2.images?.[0]
   }
 ],
       comparison,
